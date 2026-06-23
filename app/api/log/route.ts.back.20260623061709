@@ -1,0 +1,27 @@
+import { NextRequest, NextResponse } from "next/server";
+import { db, dailyLogs } from "@/lib/db";
+import { eq } from "drizzle-orm";
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { date, ...fields } = body;
+    if (!date) return NextResponse.json({ error: "date required" }, { status: 400 });
+    const now = new Date().toISOString();
+    const existing = await db.select().from(dailyLogs).where(eq(dailyLogs.date, date)).limit(1);
+    // Stringify any object fields
+    const toStore: Record<string, string> = {};
+    for (const [k, v] of Object.entries(fields)) {
+      toStore[k] = typeof v === "object" ? JSON.stringify(v) : (v as string);
+    }
+    if (existing.length > 0) {
+      await db.update(dailyLogs).set({ ...toStore, updatedAt: now }).where(eq(dailyLogs.date, date));
+    } else {
+      await db.insert(dailyLogs).values({ date, ...toStore, updatedAt: now });
+    }
+    const row = await db.select().from(dailyLogs).where(eq(dailyLogs.date, date)).limit(1);
+    return NextResponse.json(row[0]);
+  } catch (e: unknown) {
+    return NextResponse.json({ error: e instanceof Error ? e.message : "error" }, { status: 500 });
+  }
+}

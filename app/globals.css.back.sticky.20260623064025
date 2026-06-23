@@ -1,0 +1,217 @@
+@import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+
+:root {
+  --cream: #FFF8F0;
+  --cream-dark: #F5EDE0;
+  --mango: #FFB347;
+  --mango-light: #FFD08A;
+  --grape: #9B72CF;
+  --grape-light: #C4A8E8;
+  --lime: #6DB97F;
+  --lime-light: #A8D9B4;
+  --cherry: #E05B6A;
+  --cherry-light: #F0A0AA;
+  --lemon: #F5D55A;
+  --ink: #2D2416;
+  --ink-muted: #7A6A58;
+  --border: #E8DDD0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4 { font-family: "Fredoka", sans-serif; }
+
+.app-container { max-width: 430px; margin: 0 auto; min-height: 100vh; }
+
+.tab-bar {
+  display: flex; background: var(--cream);
+  border-bottom: 1.5px solid var(--border);
+  position: sticky; top: 0; z-index: 50; padding: 0 1rem;
+}
+.tab-btn {
+  flex: 1; padding: 0.875rem 0;
+  font-family: "Fredoka", sans-serif; font-size: 1rem; font-weight: 500;
+  color: var(--ink-muted); border: none; background: none; cursor: pointer;
+  border-bottom: 2.5px solid transparent; margin-bottom: -1.5px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--mango); }
+
+.card {
+  background: #fff; border: 1.5px solid var(--border); border-radius: 16px;
+  padding: 1.25rem; margin: 0 1rem 0.875rem;
+}
+.card-title {
+  font-family: "Fredoka", sans-serif; font-size: 1.1rem; font-weight: 600;
+  margin: 0 0 1rem; display: flex; align-items: center; gap: 0.4rem;
+}
+
+.input-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.625rem; }
+.input-label { font-size: 0.85rem; color: var(--ink-muted); min-width: 72px; }
+.input-emoji { font-size: 1.1rem; width: 1.6rem; text-align: center; flex-shrink: 0; }
+
+.num-input {
+  width: 72px; padding: 0.3rem 0.5rem;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.875rem;
+  background: var(--cream); color: var(--ink); text-align: right; outline: none;
+}
+.num-input:focus { border-color: var(--mango); }
+.unit-label { font-size: 0.75rem; color: var(--ink-muted); }
+
+.toggle-row { display: flex; align-items: center; justify-content: space-between; }
+.toggle {
+  width: 44px; height: 24px; border-radius: 12px; border: none; cursor: pointer;
+  position: relative; transition: background 0.2s; background: var(--border); flex-shrink: 0;
+}
+.toggle.on { background: var(--lime); }
+.toggle::after {
+  content: ""; position: absolute; width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; top: 3px; left: 3px; transition: transform 0.2s;
+}
+.toggle.on::after { transform: translateX(20px); }
+
+.text-input {
+  width: 100%; padding: 0.4rem 0.6rem; border: 1.5px solid var(--border); border-radius: 8px;
+  font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.875rem;
+  background: var(--cream); color: var(--ink); outline: none;
+}
+.text-input:focus { border-color: var(--mango); }
+textarea.text-input { resize: vertical; min-height: 60px; }
+
+.save-btn {
+  width: calc(100% - 2rem); margin: 0.5rem 1rem 1.5rem; padding: 0.875rem;
+  background: var(--mango); color: var(--ink); border: none; border-radius: 14px;
+  font-family: "Fredoka", sans-serif; font-size: 1.1rem; font-weight: 600;
+  cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+}
+.save-btn:active { transform: scale(0.98); opacity: 0.85; }
+.save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ring-summary { display: flex; justify-content: space-around; padding: 1.25rem 1rem 0.5rem; }
+.ring-item { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+.ring-label { font-size: 0.7rem; color: var(--ink-muted); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.ring-value { font-family: "Fredoka", sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+
+.date-nav { display: flex; align-items: center; justify-content: space-between; padding: 0.875rem 1.25rem 0.5rem; }
+.date-nav-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border);
+  background: #fff; cursor: pointer; font-size: 1rem; display: flex;
+  align-items: center; justify-content: center; color: var(--ink); transition: border-color 0.15s;
+}
+.date-nav-btn:hover { border-color: var(--mango); }
+.date-display { font-family: "Fredoka", sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
+.date-display.today { color: var(--cherry); }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-top: 0.5rem; }
+.cal-day-label { font-size: 0.65rem; font-weight: 700; text-align: center; color: var(--ink-muted); padding-bottom: 4px; text-transform: uppercase; }
+.cal-cell {
+  aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; font-size: 0.75rem; cursor: pointer;
+  background: var(--cream); border: 1.5px solid transparent; transition: border-color 0.1s;
+}
+.cal-cell.has-data { background: #fff; border-color: var(--border); }
+.cal-cell.today { border-color: var(--cherry); }
+.cal-cell.empty { opacity: 0; pointer-events: none; }
+.cal-cell-num { font-weight: 600; color: var(--ink); font-size: 0.8rem; }
+.cal-cell-dots { display: flex; gap: 2px; margin-top: 2px; }
+.dot { width: 4px; height: 4px; border-radius: 50%; }
+
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--cream-dark); }
+.stat-row:last-child { border-bottom: none; }
+.stat-key { font-size: 0.875rem; color: var(--ink-muted); }
+.stat-val { font-family: "Fredoka", sans-serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); }
+
+.progress-bar-wrap { height: 8px; background: var(--cream-dark); border-radius: 4px; overflow: hidden; margin-top: 0.3rem; }
+.progress-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+
+.app-header { padding: 1.25rem 1.25rem 0.25rem; display: flex; align-items: baseline; gap: 0.3rem; }
+.app-logo { font-family: "Fredoka", sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--ink); }
+.app-logo a { color: var(--ink); text-decoration: none; }
+.app-logo .title-main { color: var(--ink); }
+.app-logo .title-accent { color: var(--grape); font-style: italic; }
+
+.toast {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+  background: var(--ink); color: #fff; padding: 0.6rem 1.25rem; border-radius: 20px;
+  font-family: "Fredoka", sans-serif; font-size: 0.95rem; font-weight: 500;
+  z-index: 999; white-space: nowrap; opacity: 1; transition: opacity 0.3s;
+}
+.toast.hidden { opacity: 0; pointer-events: none; }
+
+.month-nav { display: flex; align-items: center; justify-content: space-between; padding: 0.875rem 1.25rem 0.25rem; }
+.month-title { font-family: "Fredoka", sans-serif; font-size: 1.2rem; font-weight: 600; }
+
+.sub-row { margin-left: 2rem; margin-top: -0.25rem; margin-bottom: 0.5rem; }
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--cream);
+}
+
+.tab-bar {
+  position: sticky;
+  top: 78px;
+  z-index: 99;
+}
+
+.ring-summary {
+  position: sticky;
+  top: 141px;
+  z-index: 98;
+  background: var(--cream);
+  border-bottom: 1.5px solid var(--border);
+}
+
+.app-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.app-logo img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.app-logo .title-main {
+  color: var(--ink);
+}
+
+.app-logo .title-accent {
+  color: var(--grape);
+  font-style: italic;
+}
+
+.app-footer {
+  padding: 1.5rem 1.25rem 2rem;
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+}
+
+.footer-divider {
+  border-top: 1.5px solid var(--border);
+  margin-bottom: 1rem;
+}
+
+.app-footer a {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
