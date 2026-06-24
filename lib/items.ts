@@ -16,6 +16,7 @@ export const PROTEIN_ITEMS: ItemDef[] = [
   { key: "tofu",    emoji: "🧊", label: "Tofu" },
   { key: "beans",   emoji: "🫘", label: "Beans" },
   { key: "egg",     emoji: "🥚", label: "Egg" },
+  { key: "milk",    emoji: "🥛", label: "Milk" },
 ];
 
 export const CARB_ITEMS: ItemDef[] = [
