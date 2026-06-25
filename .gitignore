@@ -47,3 +47,9 @@ data/*.db
 *.back.*
 *.broken*
 *.messy*
+
+.next/
+node_modules/
+*.bak
+*.backup
+.env
