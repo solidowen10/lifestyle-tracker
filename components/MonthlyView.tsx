@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { CATEGORIES, type Category } from "@/lib/items";
+import { CATEGORIES, isLimitCategory, isOverDailyTarget, type Category } from "@/lib/items";
 
 const CAT_COLORS: Record<Category, string> = {
   protein: "#FFB347", carbs: "#9B72CF", alcohol: "#E05B6A", coffee: "#C8914F", exercise: "#6DB97F",
@@ -70,6 +70,10 @@ export default function MonthlyView({ goals }: Props) {
   const proteinGoalDays = entries.filter(e => totalTaps(e.protein) >= goals.protein).length;
   const exerciseDays = entries.filter(e => totalTaps(e.exercise) > 0).length;
   const alcoholDays = entries.filter(e => totalTaps(e.alcohol) > 0).length;
+  const alcoholFreeDays = entries.filter(e => totalTaps(e.alcohol) === 0).length;
+  const alcoholOverLimitDays = entries.filter(e => isOverDailyTarget("alcohol", totalTaps(e.alcohol), goals.alcohol)).length;
+  const coffeeFreeDays = entries.filter(e => totalTaps(e.coffee) === 0).length;
+  const coffeeOverLimitDays = entries.filter(e => isOverDailyTarget("coffee", totalTaps(e.coffee), goals.coffee)).length;
   const totalProtein = entries.reduce((s, e) => s + totalTaps(e.protein), 0);
   const totalAlcohol = entries.reduce((s, e) => s + totalTaps(e.alcohol), 0);
   const totalCoffee = entries.reduce((s, e) => s + totalTaps(e.coffee), 0);
@@ -100,6 +104,7 @@ export default function MonthlyView({ goals }: Props) {
               if (totalTaps(entry.protein) > 0) dots.push(CAT_COLORS.protein);
               if (totalTaps(entry.carbs) > 0) dots.push(CAT_COLORS.carbs);
               if (totalTaps(entry.alcohol) > 0) dots.push(CAT_COLORS.alcohol);
+              if (totalTaps(entry.coffee) > 0) dots.push(CAT_COLORS.coffee);
               if (totalTaps(entry.exercise) > 0) dots.push(CAT_COLORS.exercise);
             }
             return (
@@ -154,6 +159,14 @@ export default function MonthlyView({ goals }: Props) {
               <span className="stat-val" style={{ color: alcoholDays > 10 ? "var(--cherry)" : "var(--ink)" }}>{alcoholDays}</span>
             </div>
             <div className="stat-row">
+              <span className="stat-key">🌿 Alcohol-free logged days</span>
+              <span className="stat-val" style={{ color: "var(--lime)" }}>{alcoholFreeDays} / {totalDays}</span>
+            </div>
+            <div className="stat-row">
+              <span className="stat-key">⚠ Alcohol over-limit days</span>
+              <span className="stat-val" style={{ color: alcoholOverLimitDays > 0 ? "var(--cherry)" : "var(--ink-muted)" }}>{alcoholOverLimitDays}</span>
+            </div>
+            <div className="stat-row">
               <span className="stat-key">🍺 Total drinks</span>
               <span className="stat-val">{totalAlcohol}</span>
             </div>
@@ -168,6 +181,14 @@ export default function MonthlyView({ goals }: Props) {
                   background: "var(--lime-light)"
                 }} />
               </div>
+            </div>
+            <div className="stat-row">
+              <span className="stat-key">🌿 Coffee-free logged days</span>
+              <span className="stat-val" style={{ color: "var(--lime)" }}>{coffeeFreeDays} / {totalDays}</span>
+            </div>
+            <div className="stat-row">
+              <span className="stat-key">⚠ Coffee over-limit days</span>
+              <span className="stat-val" style={{ color: coffeeOverLimitDays > 0 ? "var(--cherry)" : "var(--ink-muted)" }}>{coffeeOverLimitDays}</span>
             </div>
             <div className="stat-row">
               <span className="stat-key">☕ Total coffees</span>
@@ -188,11 +209,12 @@ export default function MonthlyView({ goals }: Props) {
           const totals = entries.map(e => totalTaps(e[cat.id] as Record<string, number>));
           const avg = totals.length ? (totals.reduce((s, v) => s + v, 0) / totals.length).toFixed(1) : "0";
           const max = Math.max(...totals, 0);
+          const targetLabel = isLimitCategory(cat.id) ? "limit" : "goal";
           return (
             <div key={cat.id} style={{ marginBottom: "0.75rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.25rem" }}>
                 <span style={{ fontSize: "0.85rem" }}>{cat.emoji} {cat.label}</span>
-                <span style={{ fontSize: "0.8rem", color: "var(--ink-muted)", fontFamily: "Fredoka, sans-serif" }}>avg {avg} / goal {goals[cat.id]}</span>
+                <span style={{ fontSize: "0.8rem", color: "var(--ink-muted)", fontFamily: "Fredoka, sans-serif" }}>avg {avg} / {targetLabel} {goals[cat.id]}</span>
               </div>
               {/* Mini bar chart — 7-day recent */}
               <div style={{ display: "flex", gap: 3, alignItems: "flex-end", height: 32 }}>
@@ -202,7 +224,7 @@ export default function MonthlyView({ goals }: Props) {
                   const entry = entryMap[ds2];
                   const val = entry ? totalTaps(entry[cat.id] as Record<string, number>) : 0;
                   const pct = max > 0 ? val / max : 0;
-                  const isOver = val > goals[cat.id];
+                  const isOver = isOverDailyTarget(cat.id, val, goals[cat.id]);
                   return (
                     <div key={d} title={`${d}: ${val}`} style={{
                       flex: 1, borderRadius: "3px 3px 0 0",

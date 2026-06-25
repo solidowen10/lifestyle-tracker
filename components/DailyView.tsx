@@ -2,7 +2,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { Ring } from "./Ring";
 import TapGrid from "./TapGrid";
-import { CATEGORIES, DEFAULT_GOALS, type Category } from "@/lib/items";
+import {
+  CATEGORIES,
+  isDailyTargetMet,
+  isLimitCategory,
+  isOverDailyTarget,
+  type Category,
+} from "@/lib/items";
 
 function toDateStr(d: Date) {
   const y = d.getFullYear();
@@ -35,6 +41,35 @@ function totalTaps(counts: Counts) {
   return Object.values(counts).reduce((s, v) => s + v, 0);
 }
 
+function ringValueFor(category: Category, total: number, target: number) {
+  if (!isLimitCategory(category)) return total;
+  if (target === 0) return total === 0 ? 1 : 0;
+  return Math.max(target - total, 0);
+}
+
+function ringMaxFor(category: Category, target: number) {
+  if (!isLimitCategory(category)) return Math.max(target, 1);
+  return Math.max(target, 1);
+}
+
+function summaryTextFor(category: Category, total: number, target: number) {
+  if (isLimitCategory(category)) {
+    if (total === 0) return "Good";
+    return `${total}/${target} max`;
+  }
+  return `${total}/${target}`;
+}
+
+function cardStatusFor(category: Category, total: number, target: number) {
+  if (isLimitCategory(category)) {
+    if (total === 0) return "Good work - none today";
+    if (isOverDailyTarget(category, total, target)) return `${total}/${target} over limit`;
+    return `${total}/${target} max`;
+  }
+  if (isDailyTargetMet(category, total, target)) return `${total}/${target} done`;
+  return `${total}/${target}`;
+}
+
 interface Props {
   goals: Record<Category, number>;
 }
@@ -44,7 +79,6 @@ export default function DailyView({ goals }: Props) {
   const [counts, setCounts] = useState<AllCounts>({ ...EMPTY_COUNTS });
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState("");
   const [showToast, setShowToast] = useState(false);
 
@@ -72,7 +106,12 @@ export default function DailyView({ goals }: Props) {
     } finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { load(date); }, [date, load]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void load(date);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [date, load]);
 
   const showMsg = (msg: string) => {
     setToast(msg); setShowToast(true);
@@ -80,7 +119,6 @@ export default function DailyView({ goals }: Props) {
   };
 
   const save = useCallback(async (quiet = false) => {
-    setSaving(true);
     try {
       await fetch("/lifestyle-tracker/api/log", {
         method: "POST",
@@ -93,7 +131,9 @@ export default function DailyView({ goals }: Props) {
         }),
       });
       if (!quiet) showMsg("Saved ✓");
-    } finally { setSaving(false); }
+    } catch {
+      if (!quiet) showMsg("Could not save");
+    }
   }, [ds, counts, notes]);
 
   useEffect(() => {
@@ -109,63 +149,67 @@ export default function DailyView({ goals }: Props) {
   return (
     <>
       <div className="daily-top-panel">
-      {/* Date nav */}
-      <div className="date-nav">
-        <button className="date-nav-btn" onClick={() => navDay(-1)}>‹</button>
-        <span className={`date-display ${isToday ? "today" : ""}`}>{fmtDate(date)}</span>
-        <button className="date-nav-btn" onClick={() => navDay(1)} disabled={isToday} style={{ opacity: isToday ? 0.3 : 1 }}>›</button>
+        <div className="date-nav">
+          <button className="date-nav-btn" type="button" onClick={() => navDay(-1)}>‹</button>
+          <span className={`date-display ${isToday ? "today" : ""}`}>{fmtDate(date)}</span>
+          <button className="date-nav-btn" type="button" onClick={() => navDay(1)} disabled={isToday} style={{ opacity: isToday ? 0.3 : 1 }}>›</button>
+        </div>
+
+        <div className="ring-summary">
+          {CATEGORIES.map(cat => {
+            const total = totalTaps(counts[cat.id]);
+            const goal = goals[cat.id];
+            const isLimit = isLimitCategory(cat.id);
+            const isOver = isOverDailyTarget(cat.id, total, goal);
+            const isMet = isDailyTargetMet(cat.id, total, goal);
+            const color = isLimit && total === 0 ? "var(--lime)" : `var(${CAT_COLORS[cat.id].color})`;
+            return (
+              <div className={`ring-item ${isMet ? "is-good" : ""}`} key={cat.id}>
+                <Ring
+                  value={ringValueFor(cat.id, total, goal)}
+                  max={ringMaxFor(cat.id, goal)}
+                  color={color}
+                  over={isOver}
+                />
+                <span className={`ring-value ${isOver ? "is-over" : isMet ? "is-good" : ""}`}>
+                  {summaryTextFor(cat.id, total, goal)}
+                </span>
+                <span className="ring-label">{cat.label}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {loading && <p className="daily-loading">Loading...</p>}
       </div>
 
-      {/* Ring summary */}
-      <div className="ring-summary">
-        {CATEGORIES.map(cat => {
-          const total = totalTaps(counts[cat.id]);
-          const goal = goals[cat.id];
-          return (
-            <div className="ring-item" key={cat.id}>
-              <Ring value={total} max={goal} color={`var(${CAT_COLORS[cat.id].color})`} over={total > goal} />
-              <span className="ring-value" style={{ color: total > goal ? "var(--cherry)" : undefined }}>{total}/{goal}</span>
-              <span className="ring-label">{cat.label}</span>
-            </div>
-          );
-        })}
-      </div>
-
-      {loading && <p style={{ textAlign:"center", color:"var(--ink-muted)", fontSize:"0.85rem", margin:"0.5rem 0" }}>Loading…</p>}
-
-      </div>
-
-      {/* Category cards */}
       {CATEGORIES.map(cat => {
         const total = totalTaps(counts[cat.id]);
         const goal = goals[cat.id];
-        const isOver = total > goal;
+        const isOver = isOverDailyTarget(cat.id, total, goal);
+        const isMet = isDailyTargetMet(cat.id, total, goal);
         return (
-          <div className="card" key={cat.id} style={{ borderColor: isOver ? "var(--cherry)" : undefined }}>
+          <div className={`card category-card ${isMet ? "is-good" : ""}`} key={cat.id} style={{ borderColor: isOver ? "var(--cherry)" : undefined }}>
             <div className="card-title">
               {cat.emoji} {cat.label}
-              <span style={{
-                marginLeft: "auto", fontSize: "0.85rem", fontWeight: 500,
-                color: isOver ? "var(--cherry)" : "var(--ink-muted)",
-                fontFamily: "Plus Jakarta Sans, sans-serif",
-              }}>
-                {total}/{goal}{isOver ? " over limit!" : ""}
+              <span className={`card-status ${isOver ? "is-over" : isMet ? "is-good" : ""}`}>
+                {cardStatusFor(cat.id, total, goal)}
               </span>
             </div>
             <TapGrid
               items={cat.items}
               counts={counts[cat.id]}
-              goals={{}}
               categoryGoal={goal}
               onChange={c => setCounts(prev => ({ ...prev, [cat.id]: c }))}
               color={CAT_COLORS[cat.id].color}
               overColor="--cherry"
+              goalMode={cat.goalMode}
+              emptyText={isLimitCategory(cat.id) ? "Good work - none today" : "Tap items above to log"}
             />
           </div>
         );
       })}
 
-      {/* Notes */}
       <div className="card">
         <div className="card-title">📝 Notes</div>
         <textarea

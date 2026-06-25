@@ -1,18 +1,29 @@
 "use client";
-import { ItemDef } from "@/lib/items";
+import { type GoalMode, type ItemDef } from "@/lib/items";
 
 interface TapGridProps {
   items: ItemDef[];
   counts: Record<string, number>;  // { chicken: 2, fish: 1 }
-  goals: Record<string, number>;   // per-item goal (if set), else category goal
   categoryGoal: number;            // total taps goal for category
   onChange: (counts: Record<string, number>) => void;
   color?: string;      // accent color CSS var name e.g. "--mango"
   overColor?: string;  // over-limit color e.g. "--cherry"
+  goalMode?: GoalMode;
+  emptyText?: string;
 }
 
-export default function TapGrid({ items, counts, goals, categoryGoal, onChange, color = "--mango", overColor = "--cherry" }: TapGridProps) {
+export default function TapGrid({
+  items,
+  counts,
+  categoryGoal,
+  onChange,
+  color = "--mango",
+  overColor = "--cherry",
+  goalMode = "minimum",
+  emptyText = "Tap items above to log",
+}: TapGridProps) {
   const totalTaps = Object.values(counts).reduce((s, v) => s + v, 0);
+  const isOverLimit = goalMode === "maximum" && totalTaps > categoryGoal;
 
   const tap = (key: string) => {
     const cur = counts[key] || 0;
@@ -63,7 +74,7 @@ export default function TapGrid({ items, counts, goals, categoryGoal, onChange, 
               {count > 0 && (
                 <span style={{
                   position: "absolute", top: -6, right: -6,
-                  background: totalTaps > categoryGoal ? `var(${overColor})` : `var(${color})`,
+                  background: isOverLimit ? `var(${overColor})` : `var(${color})`,
                   color: "#fff",
                   borderRadius: "10px",
                   fontSize: "0.65rem",
@@ -95,7 +106,7 @@ export default function TapGrid({ items, counts, goals, categoryGoal, onChange, 
             return Array.from({ length: count }, (_, i) => {
               const tapIndex = items.slice(0, items.findIndex(x => x.key === item.key))
                 .reduce((s, x) => s + (counts[x.key] || 0), 0) + i;
-              const isOver = tapIndex >= categoryGoal;
+              const isOver = goalMode === "maximum" && tapIndex >= categoryGoal;
               return (
                 <button
                   key={`${item.key}-${i}`}
@@ -123,17 +134,18 @@ export default function TapGrid({ items, counts, goals, categoryGoal, onChange, 
             fontFamily: "Fredoka, sans-serif",
             fontSize: "0.9rem",
             fontWeight: 600,
-            color: totalTaps > categoryGoal ? `var(${overColor})` : "var(--ink-muted)",
+            color: isOverLimit ? `var(${overColor})` : "var(--ink-muted)",
           }}>
             {totalTaps}/{categoryGoal}
-            {totalTaps > categoryGoal && <span style={{ marginLeft: 4 }}>⚠️</span>}
+            {goalMode === "maximum" && <span style={{ marginLeft: 4 }}>max</span>}
+            {isOverLimit && <span style={{ marginLeft: 4 }}>⚠️</span>}
           </span>
         </div>
       )}
 
       {totalTaps === 0 && (
         <div style={{ fontSize: "0.78rem", color: "var(--ink-muted)", textAlign: "center", padding: "0.5rem 0" }}>
-          Tap items above to log
+          {emptyText}
         </div>
       )}
     </div>

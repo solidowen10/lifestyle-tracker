@@ -1,5 +1,5 @@
 "use client";
-import { CATEGORIES, DEFAULT_GOALS, type Category } from "@/lib/items";
+import { CATEGORIES, DEFAULT_GOALS, isLimitCategory, type Category } from "@/lib/items";
 
 const CAT_COLORS: Record<Category, string> = {
   protein: "--mango", carbs: "--grape", alcohol: "--cherry", coffee: "--lemon", exercise: "--lime",
@@ -18,16 +18,18 @@ export default function SettingsView({ goals, onChange }: Props) {
   return (
     <div className="settings-page" style={{ padding: "1rem 0 2rem" }}>
       <div style={{ padding: "0.5rem 1.25rem 1rem" }}>
-        <div style={{ fontFamily: "Fredoka, sans-serif", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.25rem" }}>Daily Goals</div>
+        <div style={{ fontFamily: "Fredoka, sans-serif", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.25rem" }}>Daily Goals & Limits</div>
         <div style={{ fontSize: "0.8rem", color: "var(--ink-muted)" }}>
-          Set how many servings of each category you aim for (or want to limit) each day.
-          Tapping beyond the goal will highlight as over-limit.
+          Set minimum targets for food and movement, plus maximum limits for alcohol and coffee.
+          No alcohol or coffee logged is treated as a good day.
         </div>
       </div>
 
       {CATEGORIES.map(cat => {
         const goal = goals[cat.id];
         const color = `var(${CAT_COLORS[cat.id]})`;
+        const isLimit = isLimitCategory(cat.id);
+        const label = isLimit ? "Limit" : "Goal";
         return (
           <div className="card" key={cat.id} style={{ borderLeft: `4px solid ${color}` }}>
             <div className="card-title" style={{ marginBottom: "0.75rem" }}>
@@ -50,10 +52,14 @@ export default function SettingsView({ goals, onChange }: Props) {
                 {Array.from({ length: goal }, (_, i) => (
                   <span key={i} style={{ fontSize: "1.3rem", cursor: "pointer" }}
                     onClick={() => set(cat.id, i + 1)}
-                    title={`Set goal to ${i + 1}`}
+                    title={`Set ${label.toLowerCase()} to ${i + 1}`}
                   >{cat.items[0]?.emoji}</span>
                 ))}
-                {goal === 0 && <span style={{ fontSize: "0.8rem", color: "var(--ink-muted)" }}>No limit set</span>}
+                {goal === 0 && (
+                  <span style={{ fontSize: "0.8rem", color: "var(--ink-muted)" }}>
+                    {isLimit ? "Avoid today" : "No goal set"}
+                  </span>
+                )}
               </div>
 
               <button
@@ -67,8 +73,13 @@ export default function SettingsView({ goals, onChange }: Props) {
             </div>
 
             <div style={{ marginTop: "0.6rem", fontSize: "0.8rem", color: "var(--ink-muted)", textAlign: "center" }}>
-              Goal: <strong style={{ color: "var(--ink)", fontFamily: "Fredoka, sans-serif", fontSize: "1rem" }}>{goal}</strong> servings/day
+              {label}: <strong style={{ color: "var(--ink)", fontFamily: "Fredoka, sans-serif", fontSize: "1rem" }}>{goal}</strong> {isLimit ? "servings/day max" : "servings/day minimum"}
             </div>
+            {isLimit && (
+              <div style={{ marginTop: "0.25rem", fontSize: "0.76rem", color: "var(--lime)", textAlign: "center", fontWeight: 700 }}>
+                Less is better. Zero counts as good work.
+              </div>
+            )}
 
             {/* Available items for this category */}
             <div style={{ marginTop: "0.75rem", paddingTop: "0.75rem", borderTop: "1px solid var(--cream-dark)" }}>
