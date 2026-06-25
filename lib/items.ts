@@ -6,6 +6,8 @@ export type ItemDef = {
   label: string;
 };
 
+export type GoalMode = "minimum" | "maximum";
+
 export const PROTEIN_ITEMS: ItemDef[] = [
   { key: "chicken", emoji: "🍗", label: "Chicken" },
   { key: "pork",    emoji: "🥓", label: "Pork" },
@@ -16,6 +18,7 @@ export const PROTEIN_ITEMS: ItemDef[] = [
   { key: "tofu",    emoji: "🧊", label: "Tofu" },
   { key: "beans",   emoji: "🫘", label: "Beans" },
   { key: "egg",     emoji: "🥚", label: "Egg" },
+  { key: "milk",    emoji: "🥛", label: "Milk" },
 ];
 
 export const CARB_ITEMS: ItemDef[] = [
@@ -57,13 +60,33 @@ export const EXERCISE_ITEMS: ItemDef[] = [
 
 export type Category = "protein" | "carbs" | "alcohol" | "coffee" | "exercise";
 
-export const CATEGORIES: { id: Category; label: string; emoji: string; items: ItemDef[] }[] = [
-  { id: "protein",  label: "Protein",  emoji: "🥩", items: PROTEIN_ITEMS },
-  { id: "carbs",    label: "Carbs",    emoji: "🌾", items: CARB_ITEMS },
-  { id: "alcohol",  label: "Alcohol",  emoji: "🍷", items: ALCOHOL_ITEMS },
-  { id: "coffee",   label: "Coffee",   emoji: "☕", items: COFFEE_ITEMS },
-  { id: "exercise", label: "Exercise", emoji: "🏃", items: EXERCISE_ITEMS },
+export const CATEGORIES: { id: Category; label: string; emoji: string; items: ItemDef[]; goalMode: GoalMode }[] = [
+  { id: "protein",  label: "Protein",  emoji: "🥩", items: PROTEIN_ITEMS, goalMode: "minimum" },
+  { id: "carbs",    label: "Carbs",    emoji: "🌾", items: CARB_ITEMS, goalMode: "minimum" },
+  { id: "alcohol",  label: "Alcohol",  emoji: "🍷", items: ALCOHOL_ITEMS, goalMode: "maximum" },
+  { id: "coffee",   label: "Coffee",   emoji: "☕", items: COFFEE_ITEMS, goalMode: "maximum" },
+  { id: "exercise", label: "Exercise", emoji: "🏃", items: EXERCISE_ITEMS, goalMode: "minimum" },
 ];
+
+export const GOAL_MODE_BY_CATEGORY: Record<Category, GoalMode> = {
+  protein: "minimum",
+  carbs: "minimum",
+  alcohol: "maximum",
+  coffee: "maximum",
+  exercise: "minimum",
+};
+
+export function isLimitCategory(category: Category) {
+  return GOAL_MODE_BY_CATEGORY[category] === "maximum";
+}
+
+export function isOverDailyTarget(category: Category, total: number, target: number) {
+  return isLimitCategory(category) ? total > target : false;
+}
+
+export function isDailyTargetMet(category: Category, total: number, target: number) {
+  return isLimitCategory(category) ? total <= target : total >= target;
+}
 
 // Default goals
 export const DEFAULT_GOALS: Record<Category, number> = {
