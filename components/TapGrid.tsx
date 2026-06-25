@@ -70,7 +70,7 @@ export default function TapGrid({
               }}
             >
               <span style={{ fontSize: "1.5rem", lineHeight: 1 }}>{item.emoji}</span>
-              <span style={{ fontSize: "0.65rem", color: "var(--ink-muted)", fontFamily: "Plus Jakarta Sans, sans-serif" }}>{item.label}</span>
+              <span style={{ fontSize: "0.65rem", color: "var(--ink-muted)", fontFamily: "var(--font-seasons)" }}>{item.label}</span>
               {count > 0 && (
                 <span style={{
                   position: "absolute", top: -6, right: -6,
@@ -80,7 +80,7 @@ export default function TapGrid({
                   fontSize: "0.65rem",
                   fontWeight: 700,
                   padding: "1px 5px",
-                  fontFamily: "Fredoka, sans-serif",
+                  fontFamily: "var(--font-seasons)",
                   minWidth: 16, textAlign: "center",
                 }}>{count}</span>
               )}
@@ -131,7 +131,7 @@ export default function TapGrid({
           })}
           <span style={{
             marginLeft: "auto",
-            fontFamily: "Fredoka, sans-serif",
+            fontFamily: "var(--font-seasons)",
             fontSize: "0.9rem",
             fontWeight: 600,
             color: isOverLimit ? `var(${overColor})` : "var(--ink-muted)",

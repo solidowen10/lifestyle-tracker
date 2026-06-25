@@ -214,7 +214,7 @@ export default function MonthlyView({ goals }: Props) {
             <div key={cat.id} style={{ marginBottom: "0.75rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.25rem" }}>
                 <span style={{ fontSize: "0.85rem" }}>{cat.emoji} {cat.label}</span>
-                <span style={{ fontSize: "0.8rem", color: "var(--ink-muted)", fontFamily: "Fredoka, sans-serif" }}>avg {avg} / {targetLabel} {goals[cat.id]}</span>
+                <span style={{ fontSize: "0.8rem", color: "var(--ink-muted)", fontFamily: "var(--font-seasons)" }}>avg {avg} / {targetLabel} {goals[cat.id]}</span>
               </div>
               {/* Mini bar chart — 7-day recent */}
               <div style={{ display: "flex", gap: 3, alignItems: "flex-end", height: 32 }}>

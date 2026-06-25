@@ -18,7 +18,7 @@ export default function SettingsView({ goals, onChange }: Props) {
   return (
     <div className="settings-page" style={{ padding: "1rem 0 2rem" }}>
       <div style={{ padding: "0.5rem 1.25rem 1rem" }}>
-        <div style={{ fontFamily: "Fredoka, sans-serif", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.25rem" }}>Daily Goals & Limits</div>
+        <div style={{ fontFamily: "var(--font-seasons)", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.25rem" }}>Daily Goals & Limits</div>
         <div style={{ fontSize: "0.8rem", color: "var(--ink-muted)" }}>
           Set minimum targets for food and movement, plus maximum limits for alcohol and coffee.
           No alcohol or coffee logged is treated as a good day.
@@ -73,7 +73,7 @@ export default function SettingsView({ goals, onChange }: Props) {
             </div>
 
             <div style={{ marginTop: "0.6rem", fontSize: "0.8rem", color: "var(--ink-muted)", textAlign: "center" }}>
-              {label}: <strong style={{ color: "var(--ink)", fontFamily: "Fredoka, sans-serif", fontSize: "1rem" }}>{goal}</strong> {isLimit ? "servings/day max" : "servings/day minimum"}
+              {label}: <strong style={{ color: "var(--ink)", fontFamily: "var(--font-seasons)", fontSize: "1rem" }}>{goal}</strong> {isLimit ? "servings/day max" : "servings/day minimum"}
             </div>
             {isLimit && (
               <div style={{ marginTop: "0.25rem", fontSize: "0.76rem", color: "var(--lime)", textAlign: "center", fontWeight: 700 }}>
@@ -106,7 +106,7 @@ export default function SettingsView({ goals, onChange }: Props) {
             width: "100%", padding: "0.75rem",
             border: "1.5px solid var(--border)", borderRadius: "12px",
             background: "#fff", color: "var(--ink-muted)",
-            fontFamily: "Plus Jakarta Sans, sans-serif", fontSize: "0.875rem",
+            fontFamily: "var(--font-seasons)", fontSize: "0.875rem",
             cursor: "pointer",
           }}>Reset to defaults</button>
       </div>
@@ -122,7 +122,7 @@ export default function SettingsView({ goals, onChange }: Props) {
             borderRadius: "12px",
             background: "#fff",
             color: "var(--cherry)",
-            fontFamily: "Plus Jakarta Sans, sans-serif",
+            fontFamily: "var(--font-seasons)",
             fontSize: "0.875rem",
             cursor: "pointer",
             textAlign: "center",

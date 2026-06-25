@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  --font-seasons: "The Seasons", "The Seasons Regular", "The Seasons Light", Georgia, serif;
   --cream: #fff8f0;
   --cream-dark: #f5ede0;
   --mango: #ffb347;
@@ -34,7 +35,7 @@ body {
   margin: 0;
   background: var(--cream);
   color: var(--ink);
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--font-seasons);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -54,7 +55,7 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
 }
 
 /* luru lifestyle shell */
@@ -118,7 +119,7 @@ h4 {
   min-width: 0;
   overflow: hidden;
   color: #20170f;
-  font-family: "Fraunces", Georgia, serif;
+  font-family: var(--font-seasons);
   font-size: 40px;
   font-weight: 700;
   line-height: 1;
@@ -259,7 +260,7 @@ h4 {
 
 .luru-footer-link {
   color: var(--shell-accent);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
@@ -295,7 +296,7 @@ h4 {
   background: transparent;
   color: var(--ink-muted);
   cursor: pointer;
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1rem;
   font-weight: 650;
   line-height: 1.15;
@@ -349,7 +350,7 @@ h4 {
   align-items: center;
   gap: 0.4rem;
   color: var(--ink);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1.1rem;
   font-weight: 650;
   line-height: 1.25;
@@ -358,7 +359,7 @@ h4 {
 .card-status {
   margin-left: auto;
   color: var(--ink-muted);
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 0.82rem;
   font-weight: 700;
   line-height: 1.2;
@@ -391,7 +392,7 @@ h4 {
   border-radius: 12px;
   background: var(--shell-accent);
   color: #ffffff;
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
@@ -442,7 +443,7 @@ h4 {
 .date-display,
 .month-title {
   color: var(--ink);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1.14rem;
   font-weight: 650;
   line-height: 1.2;
@@ -471,7 +472,7 @@ h4 {
 
 .ring-value {
   color: var(--ink);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 0.84rem;
   font-weight: 700;
   line-height: 1.1;
@@ -532,7 +533,7 @@ textarea.text-input {
   border-radius: 999px;
   background: var(--ink);
   color: #ffffff;
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 0.95rem;
   font-weight: 600;
   opacity: 1;
@@ -628,7 +629,7 @@ textarea.text-input {
 
 .stat-val {
   color: var(--ink);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1.04rem;
   font-weight: 700;
   text-align: right;
