@@ -42,21 +42,24 @@ function totalTaps(counts: Counts) {
 }
 
 function ringValueFor(category: Category, total: number, target: number) {
-  if (!isLimitCategory(category)) return total;
-  if (target === 0) return total === 0 ? 1 : 0;
-  return Math.max(target - total, 0);
+  if (isLimitCategory(category)) return 1;
+  return total;
 }
 
 function ringMaxFor(category: Category, target: number) {
-  if (!isLimitCategory(category)) return Math.max(target, 1);
+  if (isLimitCategory(category)) return 1;
   return Math.max(target, 1);
 }
 
 function summaryTextFor(category: Category, total: number, target: number) {
+  const overBy = total - target;
+
   if (isLimitCategory(category)) {
-    if (total === 0) return "Good";
-    return `${total}/${target} max`;
+    if (category !== "exercise" && overBy > 0) return `+${overBy} over`;
+    return `${total}/${target}`;
   }
+
+  if (category !== "exercise" && overBy > 0) return `+${overBy} over`;
   return `${total}/${target}`;
 }
 
@@ -156,13 +159,14 @@ export default function DailyView({ goals }: Props) {
         </div>
 
         <div className="ring-summary">
-          {CATEGORIES.map(cat => {
+          {(["protein", "carbs", "exercise"] as Category[]).map(catId => {
+            const cat = CATEGORIES.find(c => c.id === catId)!;
             const total = totalTaps(counts[cat.id]);
             const goal = goals[cat.id];
             const isLimit = isLimitCategory(cat.id);
-            const isOver = isOverDailyTarget(cat.id, total, goal);
+            const isOver = cat.id !== "exercise" && total > goal;
             const isMet = isDailyTargetMet(cat.id, total, goal);
-            const color = isLimit && total === 0 ? "var(--lime)" : `var(${CAT_COLORS[cat.id].color})`;
+            const color = isOver ? "var(--cherry)" : isLimit ? (total === 0 ? "var(--lime)" : "var(--mango)") : isMet ? "var(--lime)" : `var(${CAT_COLORS[cat.id].color})`;
             return (
               <div className={`ring-item ${isMet ? "is-good" : ""}`} key={cat.id}>
                 <Ring
@@ -170,8 +174,34 @@ export default function DailyView({ goals }: Props) {
                   max={ringMaxFor(cat.id, goal)}
                   color={color}
                   over={isOver}
+                  complete={isMet}
                 />
-                <span className={`ring-value ${isOver ? "is-over" : isMet ? "is-good" : ""}`}>
+                <span className={`ring-value ${isOver ? "is-over" : isLimit && total > 0 ? "is-hazard" : isMet ? "is-good" : ""}`}>
+                  {summaryTextFor(cat.id, total, goal)}
+                </span>
+                <span className="ring-label">{cat.label}</span>
+              </div>
+            );
+          })}
+
+          {(["alcohol", "coffee"] as Category[]).map(catId => {
+            const cat = CATEGORIES.find(c => c.id === catId)!;
+            const total = totalTaps(counts[cat.id]);
+            const goal = goals[cat.id];
+            const isLimit = isLimitCategory(cat.id);
+            const isOver = cat.id !== "exercise" && total > goal;
+            const isMet = isDailyTargetMet(cat.id, total, goal);
+            const color = isOver ? "var(--cherry)" : isLimit ? (total === 0 ? "var(--lime)" : "var(--mango)") : isMet ? "var(--lime)" : `var(${CAT_COLORS[cat.id].color})`;
+            return (
+              <div className={`ring-item ${isMet ? "is-good" : ""}`} key={cat.id}>
+                <Ring
+                  value={ringValueFor(cat.id, total, goal)}
+                  max={ringMaxFor(cat.id, goal)}
+                  color={color}
+                  over={isOver}
+                  complete={isMet}
+                />
+                <span className={`ring-value ${isOver ? "is-over" : isLimit && total > 0 ? "is-hazard" : isMet ? "is-good" : ""}`}>
                   {summaryTextFor(cat.id, total, goal)}
                 </span>
                 <span className="ring-label">{cat.label}</span>
@@ -186,8 +216,9 @@ export default function DailyView({ goals }: Props) {
       {CATEGORIES.map(cat => {
         const total = totalTaps(counts[cat.id]);
         const goal = goals[cat.id];
-        const isOver = isOverDailyTarget(cat.id, total, goal);
-        const isMet = isDailyTargetMet(cat.id, total, goal);
+        const isOver = cat.id !== "exercise" && isOverDailyTarget(cat.id, total, goal);
+const isMet = isDailyTargetMet(cat.id, total, goal);
+const ringColor = isLimitCategory(cat.id) ? (total == 0 ? "var(--lime)" : isOver ? "var(--mango)" : "var(--lemon)") : (isMet ? "var(--lime)" : "var(--cream-dark)");
         return (
           <div className={`card category-card ${isMet ? "is-good" : ""}`} key={cat.id} style={{ borderColor: isOver ? "var(--cherry)" : undefined }}>
             <div className="card-title">

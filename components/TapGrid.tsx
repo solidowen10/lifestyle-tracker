@@ -57,20 +57,29 @@ export default function TapGrid({
               onContextMenu={e => { e.preventDefault(); untap(item.key); }}
               title={`${item.label} — tap to add, right-click to remove`}
               style={{
-                display: "flex", flexDirection: "column", alignItems: "center",
-                gap: "2px",
-                padding: "0.5rem 0.6rem",
+                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                gap: "6px",
+                padding: "0.45rem 0.5rem",
                 borderRadius: "12px",
                 border: `1.5px solid ${isActive ? `var(${color})` : "var(--border)"}`,
                 background: isActive ? `var(${color})22` : "#fff",
                 cursor: "pointer",
-                minWidth: 52,
+                width: 72,
+                height: 76,
+                flex: "0 0 72px",
                 transition: "all 0.1s",
                 position: "relative",
               }}
             >
-              <span style={{ fontSize: "1.5rem", lineHeight: 1 }}>{item.emoji}</span>
-              <span style={{ fontSize: "0.65rem", color: "var(--ink-muted)", fontFamily: "Plus Jakarta Sans, sans-serif" }}>{item.label}</span>
+              <span style={{ fontSize: "1.55rem", lineHeight: 1, display: "block" }}>{item.emoji}</span>
+              <span style={{
+                fontSize: "0.68rem",
+                color: "var(--ink-muted)",
+                fontFamily: "var(--font-seasons)",
+                lineHeight: 1,
+                textAlign: "center",
+                whiteSpace: "nowrap",
+              }}>{item.label}</span>
               {count > 0 && (
                 <span style={{
                   position: "absolute", top: -6, right: -6,
@@ -80,7 +89,7 @@ export default function TapGrid({
                   fontSize: "0.65rem",
                   fontWeight: 700,
                   padding: "1px 5px",
-                  fontFamily: "Fredoka, sans-serif",
+                  fontFamily: "var(--font-seasons)",
                   minWidth: 16, textAlign: "center",
                 }}>{count}</span>
               )}
@@ -131,7 +140,7 @@ export default function TapGrid({
           })}
           <span style={{
             marginLeft: "auto",
-            fontFamily: "Fredoka, sans-serif",
+            fontFamily: "var(--font-seasons)",
             fontSize: "0.9rem",
             fontWeight: 600,
             color: isOverLimit ? `var(${overColor})` : "var(--ink-muted)",

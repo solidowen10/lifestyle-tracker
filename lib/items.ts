@@ -23,12 +23,12 @@ export const PROTEIN_ITEMS: ItemDef[] = [
 
 export const CARB_ITEMS: ItemDef[] = [
   { key: "rice",    emoji: "🍚", label: "Rice" },
-  { key: "bread",   emoji: "🍞", label: "Bread" },
+  { key: "bread", emoji: "🌾", label: "Flour" },
   { key: "noodle",  emoji: "🍜", label: "Noodles" },
   { key: "potato",  emoji: "🥔", label: "Potato" },
   { key: "fruit",   emoji: "🍎", label: "Fruit" },
   { key: "corn",    emoji: "🌽", label: "Corn" },
-  { key: "sweet_potato", emoji: "🍠", label: "Sweet Potato" },
+  { key: "sweet_potato", emoji: "🍠", label: "Yam" },
   { key: "oat",     emoji: "🥣", label: "Oats" },
 ];
 
@@ -93,6 +93,6 @@ export const DEFAULT_GOALS: Record<Category, number> = {
   protein:  5,
   carbs:    3,
   alcohol:  1,
-  coffee:   2,
+  coffee:   1,
   exercise: 1,
 };

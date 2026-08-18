@@ -29,7 +29,24 @@ interface Props {
 }
 
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const DAY_LABELS = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+const DAY_LABELS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+type MonthFilter =
+  | "all"
+  | "protein"
+  | "carbs"
+  | "exercise"
+  | "alcohol"
+  | "coffee";
+
+const MONTH_FILTERS: { id: MonthFilter; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "protein", label: "Protein goal" },
+  { id: "carbs", label: "Carbs goal" },
+  { id: "exercise", label: "Exercise goal" },
+  { id: "alcohol", label: "Alcohol drank" },
+  { id: "coffee", label: "Coffee drank" },
+];
 
 export default function MonthlyView({ goals }: Props) {
   const now = new Date();
@@ -37,6 +54,7 @@ export default function MonthlyView({ goals }: Props) {
   const [month, setMonth] = useState(now.getMonth());
   const [entries, setEntries] = useState<DayData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [monthFilter, setMonthFilter] = useState<MonthFilter>("all");
 
   useEffect(() => {
     const load = async () => {
@@ -65,6 +83,41 @@ export default function MonthlyView({ goals }: Props) {
     setMonth(m); setYear(y);
   };
 
+  const matchesFilter = (entry: DayData | undefined) => {
+    if (monthFilter === "all") return true;
+    if (!entry) return false;
+
+    if (monthFilter === "protein") return totalTaps(entry.protein) >= goals.protein;
+    if (monthFilter === "carbs") return totalTaps(entry.carbs) >= goals.carbs;
+    if (monthFilter === "exercise") return totalTaps(entry.exercise) >= goals.exercise;
+    if (monthFilter === "alcohol") return totalTaps(entry.alcohol) > 0;
+    if (monthFilter === "coffee") return totalTaps(entry.coffee) > 0;
+
+    return false;
+  };
+
+  const markerFor = (entry: DayData | undefined) => {
+    if (!entry || monthFilter === "all") return "";
+
+    if (monthFilter === "protein" && totalTaps(entry.protein) >= goals.protein) return "✓";
+    if (monthFilter === "carbs" && totalTaps(entry.carbs) >= goals.carbs) return "✓";
+    if (monthFilter === "exercise" && totalTaps(entry.exercise) >= goals.exercise) return "✓";
+
+    if (monthFilter === "alcohol") {
+      const n = totalTaps(entry.alcohol);
+      if (!n) return "";
+      return n > goals.alcohol ? `+${n - goals.alcohol}` : `${n}`;
+    }
+
+    if (monthFilter === "coffee") {
+      const n = totalTaps(entry.coffee);
+      if (!n) return "";
+      return n > goals.coffee ? `+${n - goals.coffee}` : `${n}`;
+    }
+
+    return "";
+  };
+
   // Monthly stats
   const totalDays = entries.length;
   const proteinGoalDays = entries.filter(e => totalTaps(e.protein) >= goals.protein).length;
@@ -89,6 +142,18 @@ export default function MonthlyView({ goals }: Props) {
 
       {/* Calendar */}
       <div className="card">
+        <div className="month-filter-row" aria-label="Monthly calendar filter">
+          {MONTH_FILTERS.map(f => (
+            <button
+              key={f.id}
+              type="button"
+              className={`month-filter-btn ${monthFilter === f.id ? "is-active" : ""}`}
+              onClick={() => setMonthFilter(f.id)}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
         <div className="cal-grid">
           {DAY_LABELS.map(d => <div className="cal-day-label" key={d}>{d}</div>)}
           {Array.from({ length: firstDay }, (_, i) => (
@@ -99,6 +164,8 @@ export default function MonthlyView({ goals }: Props) {
             const ds = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
             const entry = entryMap[ds];
             const isToday = ds === today;
+            const isMatch = matchesFilter(entry);
+            const marker = markerFor(entry);
             const dots: string[] = [];
             if (entry) {
               if (totalTaps(entry.protein) > 0) dots.push(CAT_COLORS.protein);
@@ -108,10 +175,11 @@ export default function MonthlyView({ goals }: Props) {
               if (totalTaps(entry.exercise) > 0) dots.push(CAT_COLORS.exercise);
             }
             return (
-              <div key={day} className={`cal-cell ${entry ? "has-data" : ""} ${isToday ? "today" : ""}`}>
+              <div key={day} className={`cal-cell ${entry ? "has-data" : ""} ${isToday ? "today" : ""} ${monthFilter !== "all" ? (isMatch ? "filter-match" : "filter-dim") : ""}`}>
                 <span className="cal-cell-num">{day}</span>
+                {marker && <span className={`cal-filter-marker ${monthFilter === "alcohol" || monthFilter === "coffee" ? "is-warning" : "is-good"}`}>{marker}</span>}
                 <div className="cal-cell-dots">
-                  {dots.slice(0, 3).map((c, i) => (
+                  {dots.slice(0, 5).map((c, i) => (
                     <div key={i} className="dot" style={{ background: c }} />
                   ))}
                 </div>
@@ -214,7 +282,7 @@ export default function MonthlyView({ goals }: Props) {
             <div key={cat.id} style={{ marginBottom: "0.75rem" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.25rem" }}>
                 <span style={{ fontSize: "0.85rem" }}>{cat.emoji} {cat.label}</span>
-                <span style={{ fontSize: "0.8rem", color: "var(--ink-muted)", fontFamily: "Fredoka, sans-serif" }}>avg {avg} / {targetLabel} {goals[cat.id]}</span>
+                <span style={{ fontSize: "0.8rem", color: "var(--ink-muted)", fontFamily: "var(--font-seasons)" }}>avg {avg} / {targetLabel} {goals[cat.id]}</span>
               </div>
               {/* Mini bar chart — 7-day recent */}
               <div style={{ display: "flex", gap: 3, alignItems: "flex-end", height: 32 }}>

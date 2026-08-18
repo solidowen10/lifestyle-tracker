@@ -1,6 +1,47 @@
+@font-face {
+  font-family: "Clan Pro";
+  src: url("/lifestyle-tracker/fonts/clan-pro/FFClanProRegular.TTF") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Clan Pro";
+  src: url("/lifestyle-tracker/fonts/clan-pro/FFClanProMedium.TTF") format("truetype");
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Clan Pro";
+  src: url("/lifestyle-tracker/fonts/clan-pro/FFClanProBold.TTF") format("truetype");
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
+@font-face {
+  font-family: "The Seasons";
+  src: url("/lifestyle-tracker/fonts/the-seasons-regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "The Seasons";
+  src: url("/lifestyle-tracker/fonts/the-seasons-bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 :root {
+  --font-seasons: "Clan Pro", "The Seasons", system-ui, sans-serif;
   --cream: #fff8f0;
   --cream-dark: #f5ede0;
   --mango: #ffb347;
@@ -16,7 +57,7 @@
   --ink-muted: #7a6a58;
   --border: #e8ddd0;
   --paper: #ffffff;
-  --shell-accent: #6b8f71;
+  --shell-accent: #8A78C9;
   --shell-header-height: 82px;
   --tab-bar-height: 64px;
 }
@@ -34,7 +75,7 @@ body {
   margin: 0;
   background: var(--cream);
   color: var(--ink);
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--font-seasons);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -54,7 +95,7 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
 }
 
 /* luru lifestyle shell */
@@ -77,6 +118,9 @@ h4 {
 }
 
 .luru-shell-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 5000 !important;
   position: sticky;
   top: 0;
   z-index: 700;
@@ -84,8 +128,8 @@ h4 {
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(45, 36, 22, 0.1);
-  background: rgba(255, 248, 240, 0.96);
-  backdrop-filter: blur(14px);
+  background: var(--cream);
+  backdrop-filter: none;
 }
 
 .luru-shell-header-inner {
@@ -118,7 +162,7 @@ h4 {
   min-width: 0;
   overflow: hidden;
   color: #20170f;
-  font-family: "Fraunces", Georgia, serif;
+  font-family: var(--font-seasons);
   font-size: 40px;
   font-weight: 700;
   line-height: 1;
@@ -145,7 +189,7 @@ h4 {
   justify-content: center;
   border: 1.5px solid transparent;
   border-radius: 10px;
-  background: transparent;
+  background: var(--cream);
   color: var(--ink);
   cursor: pointer;
   font-size: 24px;
@@ -157,7 +201,7 @@ h4 {
 .luru-shell-menu-button:hover,
 .luru-shell-menu-button[aria-expanded="true"] {
   border-color: color-mix(in srgb, var(--shell-accent) 24%, var(--border));
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--cream);
   color: var(--shell-accent);
 }
 
@@ -170,8 +214,9 @@ h4 {
   display: none;
   border: 1.5px solid var(--border);
   border-radius: 12px;
-  background: var(--paper);
+  background: var(--cream);
   box-shadow: 0 18px 42px rgba(45, 36, 22, 0.16);
+  z-index: 9999;
 }
 
 .luru-shell-menu-panel.is-open {
@@ -197,7 +242,7 @@ h4 {
   gap: 10px;
   border: 0;
   border-radius: 10px;
-  background: transparent;
+  background: var(--cream);
   color: var(--ink);
   cursor: pointer;
   font-size: 0.88rem;
@@ -210,7 +255,7 @@ h4 {
 
 .luru-shell-menu-item:hover,
 .luru-shell-menu-item.is-active {
-  background: color-mix(in srgb, var(--shell-accent) 12%, #ffffff);
+  background: color-mix(in srgb, var(--shell-accent) 10%, var(--cream));
   color: #21180f;
 }
 
@@ -218,7 +263,7 @@ h4 {
   width: 24px;
   flex: 0 0 24px;
   text-align: center;
-  color: var(--shell-accent);
+  color: inherit;
   font-size: 1rem;
   font-weight: 700;
   line-height: 1;
@@ -259,7 +304,7 @@ h4 {
 
 .luru-footer-link {
   color: var(--shell-accent);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
@@ -281,7 +326,7 @@ h4 {
   align-items: center;
   gap: 0.5rem;
   border-bottom: 1.5px solid var(--border);
-  background: rgba(255, 248, 240, 0.96);
+  background: var(--cream);
   backdrop-filter: blur(12px);
 }
 
@@ -292,10 +337,10 @@ h4 {
   padding: 0.6rem 0.75rem;
   border: 1.5px solid transparent;
   border-radius: 10px;
-  background: transparent;
+  background: var(--cream);
   color: var(--ink-muted);
   cursor: pointer;
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1rem;
   font-weight: 650;
   line-height: 1.15;
@@ -308,7 +353,7 @@ h4 {
 
 .tab-btn.active {
   border-color: var(--border);
-  background: var(--paper);
+  background: var(--cream);
   color: var(--ink);
   box-shadow: 0 2px 8px rgba(45, 36, 22, 0.06);
 }
@@ -335,7 +380,7 @@ h4 {
   padding: 1.25rem;
   border: 1.5px solid var(--border);
   border-radius: 16px;
-  background: var(--paper);
+  background: var(--cream);
   box-shadow: 0 1px 4px rgba(45, 36, 22, 0.03);
 }
 
@@ -349,7 +394,7 @@ h4 {
   align-items: center;
   gap: 0.4rem;
   color: var(--ink);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1.1rem;
   font-weight: 650;
   line-height: 1.25;
@@ -358,7 +403,7 @@ h4 {
 .card-status {
   margin-left: auto;
   color: var(--ink-muted);
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 0.82rem;
   font-weight: 700;
   line-height: 1.2;
@@ -391,7 +436,7 @@ h4 {
   border-radius: 12px;
   background: var(--shell-accent);
   color: #ffffff;
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
@@ -421,7 +466,7 @@ h4 {
   justify-content: center;
   border: 1.5px solid var(--border);
   border-radius: 50%;
-  background: var(--paper);
+  background: var(--cream);
   color: var(--ink);
   cursor: pointer;
   font-size: 1rem;
@@ -442,7 +487,7 @@ h4 {
 .date-display,
 .month-title {
   color: var(--ink);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1.14rem;
   font-weight: 650;
   line-height: 1.2;
@@ -471,7 +516,7 @@ h4 {
 
 .ring-value {
   color: var(--ink);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 0.84rem;
   font-weight: 700;
   line-height: 1.1;
@@ -532,7 +577,7 @@ textarea.text-input {
   border-radius: 999px;
   background: var(--ink);
   color: #ffffff;
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 0.95rem;
   font-weight: 600;
   opacity: 1;
@@ -578,7 +623,7 @@ textarea.text-input {
 
 .cal-cell.has-data {
   border-color: var(--border);
-  background: var(--paper);
+  background: var(--cream);
 }
 
 .cal-cell.today {
@@ -628,7 +673,7 @@ textarea.text-input {
 
 .stat-val {
   color: var(--ink);
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-seasons);
   font-size: 1.04rem;
   font-weight: 700;
   text-align: right;
@@ -685,8 +730,8 @@ textarea.text-input {
   }
 
   .luru-shell-logo {
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
   }
 
   .luru-shell-app-name {
@@ -747,3 +792,133 @@ textarea.text-input {
     padding: 0.8rem 0.85rem 0.45rem;
   }
 }
+
+/* Daily ring summary grouping */
+.ring-summary-divider {
+  width: 1px;
+  align-self: stretch;
+  min-height: 64px;
+  margin: 0 4px 0 auto;
+  background: var(--border);
+  opacity: 0.9;
+}
+
+@media (max-width: 520px) {
+  .ring-summary-divider {
+    margin-left: auto;
+  }
+}
+
+
+/* Final header/title clipping fix */
+.luru-shell-brand,
+.luru-shell-app-name,
+.luru-shell-app-name em {
+  overflow: visible !important;
+  line-height: 1.18 !important;
+}
+
+/* Final daily ring layout: all five in one row */
+.ring-summary {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 36px !important;
+  flex-wrap: nowrap !important;
+}
+
+.ring-summary-divider {
+  display: none !important;
+}
+
+.ring-item {
+  flex: 0 0 auto !important;
+}
+
+/* Final daily ring status layout */
+.ring-summary {
+  width: min(100%, 720px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(72px, 1fr)) !important;
+  gap: 0.75rem !important;
+  align-items: start !important;
+}
+
+.ring-value.is-hazard {
+  color: var(--cherry) !important;
+}
+
+@media (max-width: 560px) {
+  .ring-summary {
+    grid-template-columns: repeat(3, minmax(72px, 1fr)) !important;
+  }
+}
+
+/* Monthly calendar filter */
+.month-filter-row {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin: 0 0 0.85rem;
+}
+
+.month-filter-btn {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--ink-muted);
+  padding: 0.42rem 0.72rem;
+  font-family: var(--font-seasons);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.month-filter-btn.is-active {
+  border-color: var(--shell-accent);
+  background: color-mix(in srgb, var(--shell-accent) 12%, var(--cream));
+  color: var(--ink);
+}
+
+.cal-cell {
+  position: relative;
+}
+
+.cal-cell.filter-dim {
+  opacity: 0.28;
+}
+
+.cal-cell.filter-match {
+  opacity: 1;
+  outline: 2px solid color-mix(in srgb, var(--shell-accent) 38%, transparent);
+  outline-offset: -2px;
+}
+
+.cal-filter-marker {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+  color: white;
+  z-index: 1;
+}
+
+.cal-filter-marker.is-good {
+  background: var(--lime);
+}
+
+.cal-filter-marker.is-warning {
+  background: var(--cherry);
+}
+
+

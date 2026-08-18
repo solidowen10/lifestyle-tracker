@@ -61,7 +61,7 @@ export default function LuruShellHeader({
         <a className="luru-shell-brand" href="/lifestyle-tracker" aria-label="Lifestyle Tracker home">
           <img className="luru-shell-logo" src={LOGO_SRC} alt="lürú tools" />
           <span className="luru-shell-app-name">
-            Lifestyle <em>Tracker</em>
+            Lifestyle <em style={{ color: "#8E7CC3" }}>Tracker</em>
           </span>
         </a>
 
