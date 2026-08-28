@@ -59,7 +59,7 @@ export default function LuruShellHeader({
     <header className="luru-shell-header">
       <div className="luru-shell-header-inner">
         <a className="luru-shell-brand" href="/lifestyle-tracker" aria-label="Lifestyle Tracker home">
-          <img className="luru-shell-logo" src={LOGO_SRC} alt="lürú tools" />
+          <img className="luru-shell-logo" src={LOGO_SRC} alt="lürúee tools" />
           <span className="luru-shell-app-name">
             Lifestyle <em style={{ color: "#8E7CC3" }}>Tracker</em>
           </span>
@@ -99,15 +99,19 @@ export default function LuruShellHeader({
 
             <hr className="luru-shell-menu-divider" />
             <div className="luru-shell-menu-label">Other tools</div>
-            <a className="luru-shell-menu-item" href="https://tool.selinnaowen.com/split-bill" onClick={() => setOpen(false)}>
+            <a className="luru-shell-menu-item" href="https://tool.luruee.com/split-bill" onClick={() => setOpen(false)}>
               <span className="luru-shell-menu-icon" aria-hidden="true">🧾</span>
               <span>Shared Ledger</span>
             </a>
-            <a className="luru-shell-menu-item" href="https://tool.selinnaowen.com/spending-tracker" onClick={() => setOpen(false)}>
+            <a className="luru-shell-menu-item" href="https://tool.luruee.com/spending-tracker" onClick={() => setOpen(false)}>
               <span className="luru-shell-menu-icon" aria-hidden="true">💰</span>
               <span>Spending Tracker</span>
             </a>
-            <a className="luru-shell-menu-item" href="https://tool.selinnaowen.com/" onClick={() => setOpen(false)}>
+            <a className="luru-shell-menu-item" href="https://tool.luruee.com/receipt-scanner" onClick={() => setOpen(false)}>
+              <span className="luru-shell-menu-icon" aria-hidden="true">📷</span>
+              <span>Receipt Scanner</span>
+            </a>
+            <a className="luru-shell-menu-item" href="https://tool.luruee.com/" onClick={() => setOpen(false)}>
               <span className="luru-shell-menu-icon" aria-hidden="true">🏠</span>
               <span>All Tools</span>
             </a>

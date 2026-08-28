@@ -9,7 +9,7 @@ export type LifestyleUser = {
 
 export async function getCurrentUser(req: NextRequest): Promise<LifestyleUser | null> {
   const cookie = req.headers.get("cookie") || "";
-  const host = req.headers.get("host") || "tool.selinnaowen.com";
+  const host = req.headers.get("host") || "tool.luruee.com";
   const proto = req.headers.get("x-forwarded-proto") || "https";
 
   const res = await fetch(`${proto}://${host}/spending-tracker/api/whoami`, {

@@ -91,7 +91,7 @@ export default function Home() {
       <main className="app-main app-main-narrow">
         <div className="card">
           <div className="card-title">LINE login required</div>
-          <p className="muted-copy">Log in once with LINE to use Lifestyle Tracker across lürú tools.</p>
+          <p className="muted-copy">Log in once with LINE to use Lifestyle Tracker across lürúee tools.</p>
           <a className="login-button" href="/spending-tracker/login?next=/lifestyle-tracker">
             Log in with LINE
           </a>

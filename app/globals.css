@@ -314,6 +314,15 @@ h4 {
   text-decoration: underline;
 }
 
+.luru-footer-text {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
 .tab-bar {
   position: sticky;
   top: var(--shell-header-height);

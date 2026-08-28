@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "lürú | Lifestyle Tracker",
+  title: "lürúee tools | Lifestyle Tracker",
   description: "Daily nutrition & lifestyle logging",
   icons: {
     icon: "https://www.selinnaowen.com/wp-content/uploads/2026/06/tools-logo-1.png",
