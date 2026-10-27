@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 export type LifestyleTab = "daily" | "monthly" | "settings";
 
-const LOGO_SRC = "https://www.selinnaowen.com/wp-content/uploads/2026/06/tools-logo-1.png";
+const LOGO_SRC = "https://tool.luruee.com/logo-20260824-v2.png";
 
 type MenuItem = {
   label: string;

@@ -323,6 +323,25 @@ h4 {
   letter-spacing: 0;
 }
 
+.luru-footer-links {
+  display: inline-flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.55rem;
+}
+
+.luru-footer-links a {
+  color: var(--shell-accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.luru-footer-links a:hover {
+  text-decoration: underline;
+}
+
 .tab-bar {
   position: sticky;
   top: var(--shell-header-height);

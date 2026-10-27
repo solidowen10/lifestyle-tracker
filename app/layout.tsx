@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   title: "lürúee tools | Lifestyle Tracker",
   description: "Daily nutrition & lifestyle logging",
   icons: {
-    icon: "https://www.selinnaowen.com/wp-content/uploads/2026/06/tools-logo-1.png",
-    apple: "https://www.selinnaowen.com/wp-content/uploads/2026/06/tools-logo-1.png",
+    icon: "https://tool.luruee.com/logo-20260824-v2.png",
+    apple: "https://tool.luruee.com/logo-20260824-v2.png",
   },
 };
 
